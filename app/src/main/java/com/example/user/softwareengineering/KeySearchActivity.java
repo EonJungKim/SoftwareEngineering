@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -58,8 +57,6 @@ public class KeySearchActivity extends AppCompatActivity {
         else if(REQUEST_CODE.equals("symptom")) {
             spnAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.symptom_spinner, android.R.layout.simple_spinner_item);
         }
-
-        Toast.makeText(this, REQUEST_CODE, Toast.LENGTH_SHORT).show();
 
         spnBug.setAdapter(spnAdapter);
     }
@@ -153,8 +150,6 @@ public class KeySearchActivity extends AppCompatActivity {
             String sql = null;
 
             if(REQUEST_CODE.equals("bugName")) {
-
-                Toast.makeText(this, "bugName 검색", Toast.LENGTH_SHORT).show();
                 if(!key.equals("전체보기")) {
                     sql = "select bugNum, bugName_ko, symptom from bug where bugName_ko = \"" + key + "\";";
                 }
@@ -163,8 +158,6 @@ public class KeySearchActivity extends AppCompatActivity {
                 }
             }
             else if(REQUEST_CODE.equals("symptom")) {
-
-                Toast.makeText(this, "symptom 검색", Toast.LENGTH_SHORT).show();
                 if(!key.equals("전체보기")) {
                     sql = "select bugNum, bugName_ko, symptom from bug where symptom like \'%" + key + "%\';";
                 }
