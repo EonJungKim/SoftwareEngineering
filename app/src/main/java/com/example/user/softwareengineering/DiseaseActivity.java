@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  *  ListViewActivity에서 선택된 진단에 대한 정보를 보여주는 액티비티
@@ -99,7 +100,8 @@ public class DiseaseActivity extends AppCompatActivity {
                         management = cursor2.getString(5);
                     }
                 }
-
+                else
+                    close();
             }
             else {
                 if(searchTable.equals("bug")) {
@@ -112,6 +114,9 @@ public class DiseaseActivity extends AppCompatActivity {
                     cursor1 = db.rawQuery(sql1, null);
 
                 }
+
+                if(cursor1.getCount() == 0)
+                    close();
 
                 for(int i = 0; i < cursor1.getCount(); i++) {
                     cursor1.moveToNext();
@@ -187,6 +192,11 @@ public class DiseaseActivity extends AppCompatActivity {
         }
 
         return R.mipmap.ic_launcher;
+    }
+
+    private void close() {
+        Toast.makeText(this, "검색된 병해충이 없습니다.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
 }
