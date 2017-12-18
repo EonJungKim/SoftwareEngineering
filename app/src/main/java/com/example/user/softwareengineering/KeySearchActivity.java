@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,8 +29,11 @@ public class KeySearchActivity extends AppCompatActivity {
 
     Button btnSearch;
     ListView listView;
-    TextView txtBug;
-    Spinner spnBug;
+    TextView txtKey;
+    Spinner spnKey;
+
+    RadioGroup container;
+    RadioButton rdDisease, rdBug;
 
     ArrayAdapter spnAdapter;
 
@@ -42,23 +47,38 @@ public class KeySearchActivity extends AppCompatActivity {
 
     String REQUEST_CODE;
 
+    String searchTable;
+
     private void initActivity() {
         btnSearch  = (Button) findViewById(R.id.btnSearch);
-        spnBug = (Spinner) findViewById(R.id.spnBug);
+        spnKey = (Spinner) findViewById(R.id.spnBug);
         listView = (ListView) findViewById(R.id.listView);
-        txtBug = (TextView) findViewById(R.id.txtBug);
+        txtKey = (TextView) findViewById(R.id.txtBug);
+
+        container = (RadioGroup) findViewById(R.id.container);
+        rdDisease = (RadioButton) findViewById(R.id.rdDisease);
+        rdBug = (RadioButton) findViewById(R.id.rdBug);
 
         Intent intent = getIntent();
         REQUEST_CODE = intent.getStringExtra("REQUEST_CODE");
 
-        if(REQUEST_CODE.equals("bugName")) {
+        if(REQUEST_CODE.equals("key")) {
+            rdBug.setVisibility(View.VISIBLE);
+            rdDisease.setVisibility(View.VISIBLE);
+            container.setVisibility(View.VISIBLE);
+
             spnAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.bug_spinner, android.R.layout.simple_spinner_item);
+            rdBug.setChecked(true);
         }
         else if(REQUEST_CODE.equals("symptom")) {
+            container.setVisibility(View.GONE);
+            rdBug.setVisibility(View.GONE);
+            rdDisease.setVisibility(View.GONE);
+
             spnAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.symptom_spinner, android.R.layout.simple_spinner_item);
         }
 
-        spnBug.setAdapter(spnAdapter);
+        spnKey.setAdapter(spnAdapter);
     }
 
     @Override
@@ -68,13 +88,29 @@ public class KeySearchActivity extends AppCompatActivity {
 
         initActivity();
 
-        findDatabase(key);
+        //findDatabase(key);
 
-        spnBug.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        rdDisease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spnAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.disease_spinner, android.R.layout.simple_spinner_item);
+                spnKey.setAdapter(spnAdapter);
+            }
+        });
+
+        rdBug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spnAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.bug_spinner, android.R.layout.simple_spinner_item);
+                spnKey.setAdapter(spnAdapter);
+            }
+        });
+
+        spnKey.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 key = String.valueOf(parent.getItemAtPosition(position));
-                txtBug.setText(key);
+                txtKey.setText(key);
             }
 
             @Override
@@ -98,7 +134,8 @@ public class KeySearchActivity extends AppCompatActivity {
                         String name = diagnosisItems[position].getName();
 
                         Intent myIntent = new Intent(getApplicationContext(), DiseaseActivity.class);
-                        myIntent.putExtra("BUG_NAME", name);
+                        myIntent.putExtra("NAME", name);
+                        myIntent.putExtra("SEARCH_TABLE", searchTable);
                         startActivity(myIntent);
                     }
                 });
@@ -131,8 +168,6 @@ public class KeySearchActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             DiagnosisItemView view = new DiagnosisItemView(getApplicationContext());
-            // 현재 액티비티를 프래그먼트로 바꾸게 되면 getApplicationContext()부분에서 에러가 발생
-            // 아직까지 처리하기 어려워 그냥 액티비티 상태로 놔둠
 
             DiagnosisItem item = items.get(position);
             view.setName(item.getName());
@@ -144,31 +179,86 @@ public class KeySearchActivity extends AppCompatActivity {
     }
 
     private void findDatabase(String key) {
-        db = openOrCreateDatabase("bugs.db", MODE_PRIVATE, null);
+
+        db = openOrCreateDatabase("mandarin.db", MODE_PRIVATE, null);
 
         if(db != null) {
-            String sql = null;
+            String sql1 = null;
 
-            if(REQUEST_CODE.equals("bugName")) {
-                if(!key.equals("전체보기")) {
-                    sql = "select bugNum, bugName_ko, symptom from bug where bugName_ko = \"" + key + "\";";
+            if(REQUEST_CODE.equals("key")) {
+
+                if(rdBug.isChecked() == true) {
+
+                    if(!key.equals("전체보기")) {
+                        sql1 = "select num, name_ko, symptom from bug where name_ko = \"" + key + "\";";
+                    }
+                    else {
+                        sql1 = "select num, name_ko, symptom from bug;";
+                    }
+
+                    searchTable = "bug";
                 }
-                else {
-                    sql = "select bugNum, bugName_ko, symptom from bug;";
+                else if(rdDisease.isChecked()) {
+                    if(!key.equals("전체보기")) {
+                        sql1 = "select num, name_ko, symptom from disease where name_ko = \"" + key + "\";";
+                    }
+                    else {
+                        sql1 = "select num, name_ko, symptom from disease;";
+                    }
+
+                    searchTable = "disease";
                 }
+
+                Cursor cursor1 = db.rawQuery(sql1, null);
+
+                setListView(cursor1);
             }
             else if(REQUEST_CODE.equals("symptom")) {
+                String sql2;
+
                 if(!key.equals("전체보기")) {
-                    sql = "select bugNum, bugName_ko, symptom from bug where symptom like \'%" + key + "%\';";
+                    sql1 = "select num, name_ko, symptom from bug where symptom like \'%" + key + "%\';";
+                    sql2 = "select num, name_ko, symptom from disease where symptom like '%" + key + "%\';";
                 }
                 else {
-                    sql = "select bugNum, bugName_ko, symptom from bug;";
+                    sql1 = "select num, name_ko, symptom from bug;";
+                    sql2 = "select num, name_ko, symptom from disease;";
                 }
+
+                Cursor cursor1 = db.rawQuery(sql1, null);
+                Cursor cursor2 = db.rawQuery(sql2, null);
+
+                setListView(cursor1, cursor2);
             }
+        }
+    }
 
-            Cursor cursor = db.rawQuery(sql, null);
+    private void setListView(Cursor cursor1, Cursor cursor2) {
+        itemNum = cursor1.getCount() + cursor2.getCount();
 
-            setListView(cursor);
+        adapter = new DiagnosisAdapter();
+        diagnosisItems = new DiagnosisItem[itemNum];
+
+        searchTable = "all";
+
+        for(int i = 0; i < cursor1.getCount(); i++) {
+            cursor1.moveToNext();
+
+            int resId = findBugResID(cursor1.getInt(0));
+
+            diagnosisItems[i] = new DiagnosisItem(cursor1.getInt(0), cursor1.getString(1), cursor1.getString(2), resId);
+
+            adapter.addItem(diagnosisItems[i]);
+        }
+
+        for(int i = cursor1.getCount(); i < itemNum; i++) {
+            cursor2.moveToNext();
+
+            int resId = findDiseaseResID(cursor2.getInt(0));
+
+            diagnosisItems[i] = new DiagnosisItem(cursor2.getInt(0), cursor2.getString(1), cursor2.getString(2), resId);
+
+            adapter.addItem(diagnosisItems[i]);
         }
 
     }
@@ -182,7 +272,14 @@ public class KeySearchActivity extends AppCompatActivity {
         for(int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToNext();
 
-            int resId = findResID(cursor.getInt(0));
+            int resId = 0;
+
+            if(searchTable.equals("bug")) {
+                resId = findBugResID(cursor.getInt(0));
+            }
+            else if(searchTable.equals("disease")) {
+                resId = findDiseaseResID(cursor.getInt(0));
+            }
 
             diagnosisItems[i] = new DiagnosisItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2), resId);
 
@@ -190,7 +287,7 @@ public class KeySearchActivity extends AppCompatActivity {
         }
     }
 
-    private int findResID(int id) {
+    private int findBugResID(int id) {
         switch (id) {
             case 1:
                 return R.drawable.bug1;
@@ -225,5 +322,18 @@ public class KeySearchActivity extends AppCompatActivity {
         }
 
         return R.drawable.bug1;
+    }
+
+    private int findDiseaseResID(int id) {
+        switch (id) {
+            case 1:
+                return R.drawable.disease1;
+            case 2:
+                return R.drawable.disease2;
+            case 3:
+                return R.drawable.disease3;
+        }
+
+        return R.drawable.disease1;
     }
 }

@@ -13,6 +13,27 @@
         android:layout_margin="8dp"
         android:src="@mipmap/ic_launcher"/>
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rdDiseaseImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="질병 검색"/>
+
+        <RadioButton
+            android:id="@+id/rdBugImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="해충 검색"/>
+
+    </RadioGroup>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,30 +41,58 @@
 
         <Button
             android:id="@+id/btnCamera"
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn4"/>
+
+        <Button
+            android:id="@+id/btnGallery"
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn3"/>
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:text="카메라"
-            android:textSize="24dp" />
+            android:gravity="center_horizontal"/>
 
-        <Button
-            android:id="@+id/btnGallery"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:text="갤러리"
-            android:textSize="24dp" />
+            android:gravity="center_horizontal"/>
 
-        <Button
-            android:id="@+id/btnSearch"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:text="검색"
-            android:textSize="24dp"/>
+            android:gravity="center_horizontal"/>
 
     </LinearLayout>
 

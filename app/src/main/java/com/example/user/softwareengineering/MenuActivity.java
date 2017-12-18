@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -18,8 +17,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        TextView btnImageSearch = (TextView) findViewById(R.id.btnImageSearch);
-        btnImageSearch.setOnClickListener(new View.OnClickListener() {
+        TextView btnBugImageSearch = (TextView) findViewById(R.id.btnImageSearch);
+        btnBugImageSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(getApplicationContext(), VisualSearchActivity.class);
@@ -32,12 +31,12 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(getApplicationContext(), KeySearchActivity.class);
-                myIntent.putExtra("REQUEST_CODE", "bugName");
+                myIntent.putExtra("REQUEST_CODE", "key");
                 startActivity(myIntent);
             }
         });
 
-        Button btnSymptomSearch = (Button) findViewById(R.id.btnSymptomSearch);
+        TextView btnSymptomSearch = (TextView) findViewById(R.id.btnSymptomSearch);
         btnSymptomSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

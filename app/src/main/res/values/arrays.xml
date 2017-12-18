@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="disease_spinner">
+        <item>전체보기</item>
+        <item>질병1</item>
+        <item>질병2</item>
+        <item>질병3</item>
+
+    </string-array>
+
     <string-array name="bug_spinner">
         <item>전체보기</item>
         <item>썩덩나무노린재</item>

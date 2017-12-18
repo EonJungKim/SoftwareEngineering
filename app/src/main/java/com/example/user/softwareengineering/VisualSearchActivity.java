@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +40,8 @@ public class VisualSearchActivity extends AppCompatActivity {
     File file;
     boolean imageLoad;  // 이미지를 업로드 했는지 확인하는 변수
 
+    RadioButton rdDisease, rdBug;
+
     private static int CAMERA_REQUEST_CODE = 101;   // 카메라 요청 코드
     private static int GALLERY_REQUEST_CODE = 201;    // 갤러리 요청 코드
 
@@ -51,6 +54,11 @@ public class VisualSearchActivity extends AppCompatActivity {
         file = new File(sdcard, "capture.jpg");
 
         imageView = (ImageView) findViewById(R.id.imageView);
+
+        rdDisease = (RadioButton) findViewById(R.id.rdDiseaseImage);
+        rdBug = (RadioButton) findViewById(R.id.rdBugImage);
+
+        rdDisease.setChecked(true);
 
         Button btnCamera = (Button) findViewById(R.id.btnCamera);
         btnCamera.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +93,13 @@ public class VisualSearchActivity extends AppCompatActivity {
                     // VisualSearchActivity에서 사진을 보내므로 결과 또한 해당 액티비티에서 받아서 사용한다.
 
                     Intent myIntent = new Intent(getApplicationContext(), DiseaseActivity.class);
-                    myIntent.putExtra("BUG_NAME", "달팽이");
+                    myIntent.putExtra("NAME", "달팽이");
+
+                    if(rdBug.isChecked())
+                        myIntent.putExtra("SEARCH_TABLE", "bug");
+                    else if(rdDisease.isChecked())
+                        myIntent.putExtra("SEARCH_TABLE", "disease");
+
                     startActivity(myIntent);
                 }
                 else    // 사진을 업로드 하지 않은 경우 경고 메시지 출력

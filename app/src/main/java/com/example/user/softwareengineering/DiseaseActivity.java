@@ -32,6 +32,8 @@ public class DiseaseActivity extends AppCompatActivity {
 
     SQLiteDatabase db;
 
+    String searchTable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,27 +51,77 @@ public class DiseaseActivity extends AppCompatActivity {
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         Intent intent = getIntent();
-        name_ko = intent.getStringExtra("BUG_NAME");
+        name_ko = intent.getStringExtra("NAME");
+        searchTable = intent.getStringExtra("SEARCH_TABLE");
 
         setTextView();
     }
 
     private void setTextView() {
-        db = openOrCreateDatabase("bugs.db", MODE_PRIVATE, null);
+        db = openOrCreateDatabase("mandarin.db", MODE_PRIVATE, null);
 
         if(db != null) {
-            String sql = "select bugNum, bugName_eg, bugName_ko, symptom, content, management from bug where bugName_ko = \"" + name_ko + "\";";
 
-            Cursor cursor = db.rawQuery(sql, null);
+            String sql1 = null;
 
-            for(int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToNext();
-                num = cursor.getInt(0);
-                name_ko = cursor.getString(2);
-                name_eg = cursor.getString(1);
-                symptom = cursor.getString(3);
-                content = cursor.getString(4);
-                management = cursor.getString(5);
+            Cursor cursor1 = null, cursor2;
+
+            if(searchTable.equals("all")) {
+                sql1 = "select num, name_eg, name_ko, symptom, content, management from bug where name_ko = \"" + name_ko + "\";";
+                String sql2 = "select num, name_eg, name_ko, symptom, content, management from disease where name_ko = \"" + name_ko + "\";";
+
+                cursor1 = db.rawQuery(sql1, null);
+                cursor2 = db.rawQuery(sql2, null);
+
+                if(cursor1.getCount() == 1) {
+                    searchTable = "bug";
+
+                    for(int i = 0; i < cursor1.getCount(); i++) {
+                        cursor1.moveToNext();
+                        num = cursor1.getInt(0);
+                        name_eg = cursor1.getString(1);
+                        name_ko = cursor1.getString(2);
+                        symptom = cursor1.getString(3);
+                        content = cursor1.getString(4);
+                        management = cursor1.getString(5);
+                    }
+                }
+                else if(cursor2.getCount() == 1){
+                    searchTable = "disease";
+
+                    for(int i = 0; i < cursor2.getCount(); i++) {
+                        cursor2.moveToNext();
+                        num = cursor2.getInt(0);
+                        name_ko = cursor2.getString(2);
+                        name_eg = cursor2.getString(1);
+                        symptom = cursor2.getString(3);
+                        content = cursor2.getString(4);
+                        management = cursor2.getString(5);
+                    }
+                }
+
+            }
+            else {
+                if(searchTable.equals("bug")) {
+                    sql1 = "select num, name_eg, name_ko, symptom, content, management from bug where name_ko = \"" + name_ko + "\";";
+                    cursor1 = db.rawQuery(sql1, null);
+
+                }
+                else if(searchTable.equals("disease")) {
+                    sql1 = "select num, name_eg, name_ko, symptom, content, management from disease where name_ko = \"" + name_ko + "\";";
+                    cursor1 = db.rawQuery(sql1, null);
+
+                }
+
+                for(int i = 0; i < cursor1.getCount(); i++) {
+                    cursor1.moveToNext();
+                    num = cursor1.getInt(0);
+                    name_ko = cursor1.getString(2);
+                    name_eg = cursor1.getString(1);
+                    symptom = cursor1.getString(3);
+                    content = cursor1.getString(4);
+                    management = cursor1.getString(5);
+                }
             }
 
             txtDiseaseNameKorean.setText(name_ko);
@@ -78,11 +130,16 @@ public class DiseaseActivity extends AppCompatActivity {
             txtContent.setText(content);
             txtManagement.setText(management);
 
-            imageView.setImageResource(findResID(num));
+            if(searchTable.equals("bug")) {
+                imageView.setImageResource(findBugResID(num));
+            }
+            else {
+                imageView.setImageResource(findDiseaseResID(num));
+            }
         }
     }
 
-    private int findResID(int id) {
+    private int findBugResID(int id) {
         switch (id) {
             case 1:
                 return R.drawable.bug1;
@@ -118,4 +175,18 @@ public class DiseaseActivity extends AppCompatActivity {
 
         return R.mipmap.ic_launcher;
     }
+
+    private int findDiseaseResID(int id) {
+        switch (id) {
+            case 1:
+                return R.drawable.disease1;
+            case 2:
+                return R.drawable.disease2;
+            case 3:
+                return R.drawable.disease3;
+        }
+
+        return R.mipmap.ic_launcher;
+    }
+
 }

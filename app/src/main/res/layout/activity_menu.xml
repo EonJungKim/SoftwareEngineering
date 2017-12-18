@@ -8,21 +8,63 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:gravity="center_horizontal|bottom"
         android:orientation="vertical">
 
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical">
+
         <TextView
             android:id="@+id/btnImageSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/camera"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:background="@drawable/btn4"
             android:shadowColor="@android:color/background_light" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="이미지 검색"
+            android:textSize="24dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnKeySearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/btn2"
+            android:shadowColor="@android:color/background_light" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="병충해 검색"
+            android:textSize="24dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnSymptomSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/btn1"
+            android:shadowColor="@android:color/background_light" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="증상 검색"
             android:textSize="24dp"
             android:textStyle="bold" />
 
@@ -32,36 +74,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnSymptomSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="증상 검색"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
         android:gravity="center_horizontal|top"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/btnKeySearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/search"
-            android:shadowColor="@android:color/background_light" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="병충해 검색"
-            android:textSize="24dp"
-            android:textStyle="bold" />
 
     </LinearLayout>
 
