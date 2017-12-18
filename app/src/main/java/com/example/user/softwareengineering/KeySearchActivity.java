@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 /**
  *  병충해를 직접적으로 검색하는 액티비티
- *  UI구성해야함.
  *  현재 구현되어 있는 버튼으로 인해 ListViewActivity로 화면을 전환하게 된다.
  */
 

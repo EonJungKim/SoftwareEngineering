@@ -20,17 +20,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *  임시적으로 UI를 구현.
  *
  *  카메라 애플리케이션으로 사진을 찍고 그 사진을 받아오거나, 갤러리에서 이미지를 찾을 수 있음.
- *  받아온 사진은 화면에 있는 이미지뷰에 보이고, 추후 텐서플로우와의 통신할 때 이 사진을 보내면 될 듯하다.
  *
  *  imageLoad 변수를 사용해서 이미지가 업로드 되지 않은 채로 검색 버튼을 누르면 경고 다이얼로그가 실행됨
- *
- *  이미지를 업로드하고 검색을 할 때, 텐서플로우로 데이터를 넘기고 결과를 받아오는 방법을 결정해야함.
- *  1. 이 액티비티에서 텐서플로우로 데이터를 보내고 결과를 받은 후 ListViewActivity에 결과를 전달하는 방법
- *  2. 이 액티비티에서 데이터를 ListViewActivity로 전달하고, ListViewActivity에서 텐서플로우로 데이터를 보내고,
- *     결과를 ListViewActivity에서 받아 처리하는 방법
  */
 
 public class VisualSearchActivity extends AppCompatActivity {
